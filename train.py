@@ -99,7 +99,7 @@ def text_correct(text, multiline=True):
     return text
 
 
-LLM = BigramLanguageModel(vocab_size, time_intervals, vocab_embed=1024, n_embed=768, features=3, n_layers=17, device=device).to(device)
+LLM = BigramLanguageModel(vocab_size, time_intervals, vocab_embed=738, n_embed=738, features=3, n_layers=17, device=device).to(device)
 optimizer = torch.optim.AdamW(LLM.parameters(), lr=learning_rate)
 
 pytorch_total_params = sum(p.numel() for p in LLM.parameters())
