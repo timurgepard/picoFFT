@@ -1,5 +1,5 @@
 # picoFFT
-25M FeedForward without Self-Attention
+27M FeedForward without Self-Attention
 
 Time Sequence: 384
 
