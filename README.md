@@ -9,4 +9,4 @@ Embedding Dim: 738
 
 Layers: 17
 
-heads: 3 (features)
+features: 3 (heads)
