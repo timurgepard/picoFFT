@@ -5,7 +5,6 @@ import random
 import torch.jit as jit
 import math
 
-dropout = 0.1
 
 
 torch.manual_seed(1337)
