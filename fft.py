@@ -7,6 +7,7 @@ import math
 
 
 
+
 torch.manual_seed(1337)
 
 
@@ -28,7 +29,7 @@ class ReSine(jit.ScriptModule):
         super(ReSine, self).__init__()
 
         self.s = (2*torch.rand(n_embed)-1).to('cuda')
-        self.r = (20*torch.rand(n_embed)-10).to('cuda')
+        self.r = (10*torch.rand(n_embed)-5).to('cuda')
 
 
 
