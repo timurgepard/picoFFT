@@ -107,7 +107,7 @@ print('LLM parameters: ', pytorch_total_params)
 
 
 try:
-    LLM.load_state_dict(torch.load('LLM_model.pt'))
+    LLM.load_state_dict(torch.load('LLM_model.pt',  weights_only=True))
     context = get_random_block()
     text = decode(LLM.generate(context, max_new_tokens=1000)[0].tolist())[-1000:]
     print(text_correct(text))
