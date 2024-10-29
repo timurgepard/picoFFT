@@ -5,7 +5,7 @@ import pickle
 import re
 
 torch.manual_seed(1337)
-scaler = torch.cuda.amp.GradScaler()
+scaler = torch.amp.GradScaler('cuda')
 
 batch_size = 64
 time_intervals = 384
@@ -147,7 +147,7 @@ for iter in range(max_iter):
     xb, yb = get_batch()
 
     #evaluate the loss
-    with torch.cuda.amp.autocast(dtype=torch.float16):
+    with torch.amp.autocast('cuda', dtype=torch.float16):
         _, _, loss = LLM.update(xb, targets=yb)
     optimizer.zero_grad(set_to_none=True)
     scaler.scale(loss).backward()
