@@ -1,5 +1,5 @@
 # picoFFT
-25M FeedForward Fourier Transformer (time-dependancy instead of self-attention)
+25M FeedForward Fourier Transformer (FeedForward without Self-Attention)
 
 Time Sequence: 384
 
