@@ -1,2 +1,2 @@
 # trained model 24h
-due to 25mb file restriction it was quite a challenge
+due to 25mb file restriction it was quite a challenge to upload it here
