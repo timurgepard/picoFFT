@@ -13,6 +13,7 @@ max_iter = 1000000
 eval_interval = 250
 learning_rate = 3e-5
 eval_iters = 10
+
 vocab_embed = 738
 n_embed = 738
 layers = 17
@@ -175,7 +176,6 @@ print("###########################################")
 
 text = decode(LLM.generate(context, max_new_tokens=500)[0].tolist())
 print(text_correct(text))
-
 
 
 
