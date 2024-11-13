@@ -13,6 +13,11 @@ max_iter = 1000000
 eval_interval = 250
 learning_rate = 3e-5
 eval_iters = 10
+vocab_embed = 738
+n_embed = 738
+layers = 17
+facets = 3
+
 
 
 
@@ -99,7 +104,7 @@ def text_correct(text, multiline=True):
     return text
 
 
-LLM = BigramLanguageModel(vocab_size, time_intervals, vocab_embed=738, n_embed=738, features=3, n_layers=17, device=device).to(device)
+LLM = BigramLanguageModel(vocab_size, time_intervals, vocab_embed=vocab_embed, n_embed=n_embed, facets=facets, n_layers=layers, device=device).to(device)
 optimizer = torch.optim.AdamW(LLM.parameters(), lr=learning_rate)
 
 pytorch_total_params = sum(p.numel() for p in LLM.parameters())
