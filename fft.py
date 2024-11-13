@@ -87,25 +87,19 @@ class Block(jit.ScriptModule):
 
 
 
-
 class BigramLanguageModel(jit.ScriptModule):
     def __init__(self, vocab_size, time_intervals, vocab_embed, n_embed, facets, n_layers, device="cpu"):
         super().__init__()
         self.device = device
         self.token_embedding_table = nn.Embedding(vocab_size, vocab_embed)
-        self.position_embedding_table = nn.Embedding(time_intervals, vocab_embed)
-
-        self.ln_in = nn.LayerNorm(vocab_embed)
-        self.uniform = nn.Linear(vocab_embed, n_embed)
 
         tri = torch.tril(torch.ones((time_intervals, time_intervals), dtype=torch.float32)).to(device)
         tri_W = tri/tri.sum(dim=1, keepdim=True)
 
         self.blocks = nn.Sequential(*[Block(time_intervals, n_embed, facets, tri_W.detach()) for _ in range(n_layers)])
-
         
         self.ln_out = nn.LayerNorm(n_embed)
-        
+
         self.linear_head = nn.Linear(n_embed, vocab_size)
 
         self.time_intervals = time_intervals
@@ -117,18 +111,15 @@ class BigramLanguageModel(jit.ScriptModule):
     @jit.script_method
     def forward(self, idx):
         B, T = idx.shape
- 
-        tok_emb = self.token_embedding_table(idx) # B, T, E
-        pos_emb = self.position_embedding_table(torch.arange(T, device=self.device))
-        x = tok_emb + pos_emb
+        x = self.token_embedding_table(idx) # B, T, E
 
-        x = self.uniform(self.ln_in(x))
         embed  = self.ln_out(self.blocks(x))
+
         logits = self.linear_head(embed)
 
         return embed, logits
 
-
+    @jit.script_method
     def update(self, idx, targets):
         embed, logits = self(idx)
         B, T, V = logits.shape
