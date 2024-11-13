@@ -55,11 +55,11 @@ class ReSine(jit.ScriptModule):
 
 
 class Block(jit.ScriptModule):
-    def __init__(self, time_intervals, n_embed, features, tri_W):
+    def __init__(self, time_intervals, n_embed, facets, tri_W):
         super().__init__()
 
-        self.f = features
-        self.E_f = n_embed//features
+        self.f = facets
+        self.E_f = n_embed//facets
 
         self.fft= nn.Sequential(
             nn.Linear(time_intervals, time_intervals, bias=None),
@@ -89,7 +89,7 @@ class Block(jit.ScriptModule):
 
 
 class BigramLanguageModel(jit.ScriptModule):
-    def __init__(self, vocab_size, time_intervals, vocab_embed, n_embed, features, n_layers, device="cpu"):
+    def __init__(self, vocab_size, time_intervals, vocab_embed, n_embed, facets, n_layers, device="cpu"):
         super().__init__()
         self.device = device
         self.token_embedding_table = nn.Embedding(vocab_size, vocab_embed)
@@ -101,7 +101,7 @@ class BigramLanguageModel(jit.ScriptModule):
         tri = torch.tril(torch.ones((time_intervals, time_intervals), dtype=torch.float32)).to(device)
         tri_W = tri/tri.sum(dim=1, keepdim=True)
 
-        self.blocks = nn.Sequential(*[Block(time_intervals, n_embed, features, tri_W.detach()) for _ in range(n_layers)])
+        self.blocks = nn.Sequential(*[Block(time_intervals, n_embed, facets, tri_W.detach()) for _ in range(n_layers)])
 
         
         self.ln_out = nn.LayerNorm(n_embed)
