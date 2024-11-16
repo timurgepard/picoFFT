@@ -92,6 +92,11 @@ class BigramLanguageModel(jit.ScriptModule):
         super().__init__()
         self.device = device
         self.token_embedding_table = nn.Embedding(vocab_size, vocab_embed)
+        self.position_embedding_table = nn.Embedding(time_intervals, vocab_embed)
+
+        self.ln_in = nn.LayerNorm(vocab_embed)
+        self.uniform = nn.Linear(vocab_embed, n_embed)
+
 
         tri = torch.tril(torch.ones((time_intervals, time_intervals), dtype=torch.float32)).to(device)
         tri_W = tri/tri.sum(dim=1, keepdim=True)
@@ -111,7 +116,11 @@ class BigramLanguageModel(jit.ScriptModule):
     @jit.script_method
     def forward(self, idx):
         B, T = idx.shape
-        x = self.token_embedding_table(idx) # B, T, E
+        tok_emb = self.token_embedding_table(idx) # B, T, E
+        pos_emb = self.position_embedding_table(torch.arange(T, device=self.device))
+        x = tok_emb + pos_emb
+
+        x = self.uniform(self.ln_in(x))
 
         embed  = self.ln_out(self.blocks(x))
 
