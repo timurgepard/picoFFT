@@ -17,7 +17,7 @@ eval_iters = 10
 vocab_embed = 768
 n_embed = 768
 layers = 17
-facets = 4
+facets = 3
 
 
 
