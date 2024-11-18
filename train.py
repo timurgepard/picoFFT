@@ -14,10 +14,10 @@ eval_interval = 250
 learning_rate = 3e-5
 eval_iters = 10
 
-vocab_embed = 756
-n_embed = 756
+vocab_embed = 768
+n_embed = 768
 layers = 17
-facets = 3
+facets = 4
 
 
 
