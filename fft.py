@@ -94,7 +94,7 @@ class BigramLanguageModel(jit.ScriptModule):
         self.tok_emb = nn.Embedding(vocab_size, vocab_embed)
         self.pos_emb = nn.Embedding(time_intervals, vocab_embed)
 
-        self.seq = torch.arange(time_intervals, device=device)
+        self.seq = nn.Parameter(data=torch.arange(time_intervals, device=device), requires_grad=False)
 
         self.ln_in = nn.LayerNorm(vocab_embed)
         self.uniform = nn.Linear(vocab_embed, n_embed)
